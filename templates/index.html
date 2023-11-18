@@ -6,11 +6,17 @@
 {% if memo_list == [] %}
   <p>メモは登録されていません。</p>
 {% else %}
-  {% for memo in memo_list %}
-    <article>
-      <h2>{{memo.title}}</h2>
-      <p>{{memo.body}}</p>
-    </article>
-  {% endfor %}
+  <table border="1">
+    <tr>
+      <th>タイトル</th>
+      <th>メモ</th>
+    </tr>
+    {% for memo in memo_list %}
+      <tr>
+        <td>{{memo.title}}</td>
+        <td>{{memo.body}}</td>
+      </tr>
+    {% endfor %}
+  </table>
 {% endif %}
 {% endblock content %}
