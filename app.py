@@ -10,6 +10,10 @@ def top():
     memo_list = get_db().execute("select id, title, body from memo").fetchall()
     return render_template("index.html", memo_list=memo_list)
 
+@app.route("/regist", methods=["GET", "POST"])
+def regist():
+    return render_template("regist.html")
+
 if __name__ == "__main__":
     app.run()
 
