@@ -49,6 +49,11 @@ Package install
 ```
 $ pip install Flask
 ```
+Settings environment variable
+```
+$ export FLASK_APP=app
+$ export FLASK_ENV=development
+```
 Start up 
 ```
 $ flask run --debugger --reload
