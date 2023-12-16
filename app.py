@@ -25,6 +25,15 @@ def regist():
 
 @app.route("/<id>/edit", methods=['GET', 'POST'])
 def edit(id):
+    if request.method =='POST':
+        #画面からの登録情報の取得
+        title = request.form.get('title')
+        body = request.form.get('body')
+        db = get_db()
+        db.execute("update memo set title=?, body=? where id=?",[title,body,id])
+        db.commit()
+        return redirect('/')
+
     post = get_db().execute(
         "select id, title, body from memo where id=?",(id,)
     ).fetchone()
