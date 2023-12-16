@@ -1,9 +1,29 @@
 from flask import Flask
 from flask import render_template, g, redirect, request
+from flask_login import UserMixin, LoginManager
+
 import sqlite3
 DATABASE="flaskmemo.db"
+import os
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+class User(UserMixin):
+    def __init__(self, userid):
+        self.id = userid
+
+#ログイン
+@login_manager.user_loader
+def load_user(userid):
+    return User(userid)
+@app.route("/login", methods=['GET','POST'])
+def login():
+    error_message = ""
+    userid = ""
+    return render_template("login.html", userid=userid, error_message=error_message)
 
 @app.route("/")
 def top():
