@@ -23,6 +23,13 @@ def regist():
     
     return render_template('regist.html')
 
+@app.route("/<id>/edit", methods=['GET', 'POST'])
+def edit(id):
+    post = get_db().execute(
+        "select id, title, body from memo where id=?",(id,)
+    ).fetchone()
+    return render_template("edit.html", post=post)
+
 if __name__ == "__main__":
     app.run()
 
