@@ -39,6 +39,13 @@ def edit(id):
     ).fetchone()
     return render_template("edit.html", post=post)
 
+@app.route("/<id>/delete", methods=['GET', 'POST'])
+def delete(id):
+    post = get_db().execute(
+        "select id, title, body from memo where id=?",(id,)
+    ).fetchone()
+    return render_template("delete.html", post=post)
+
 if __name__ == "__main__":
     app.run()
 
