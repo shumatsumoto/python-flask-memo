@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import render_template, g, redirect, request
-from flask_login import UserMixin, LoginManager, login_required, login_user
+from flask_login import UserMixin, LoginManager, login_required, login_user, logout_user
 
 import sqlite3
 DATABASE="flaskmemo.db"
@@ -21,6 +21,12 @@ def load_user(userid):
     return User(userid)
 @login_manager.unauthorized_handler
 def unauthorized():
+    return redirect("/login")
+
+#ログアウト
+@app.route("/logout", methods=["GET"])
+def logout():
+    logout_user()
     return redirect("/login")
 
 @app.route("/login", methods=['GET','POST'])
