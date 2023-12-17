@@ -5,6 +5,7 @@ from flask_login import UserMixin, LoginManager, login_required, login_user, log
 import sqlite3
 DATABASE="flaskmemo.db"
 import os
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -28,6 +29,24 @@ def unauthorized():
 def logout():
     logout_user()
     return redirect("/login")
+
+@app.route("/signup", methods=['GET','POST'])
+def signup():
+    error_message = ""
+    if request.method == "POST":
+        userid = request.form.get("userid")
+        password = request.form.get("password")
+        pass_hash = generate_password_hash(password, method = "sha256")
+
+        db = get_db()
+        db.execute(
+            "insert into user (userid, password) values(?, ?)",
+            [userid, pass_hash]
+        )
+        db.commit()
+        return redirect("/login")
+
+    return render_template("signup.html", error_message=error_message)
 
 @app.route("/login", methods=['GET','POST'])
 def login():
