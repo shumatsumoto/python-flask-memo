@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import render_template, g, redirect, request
-from flask_login import UserMixin, LoginManager, login_required
+from flask_login import UserMixin, LoginManager, login_required, login_user
 
 import sqlite3
 DATABASE="flaskmemo.db"
@@ -27,6 +27,18 @@ def unauthorized():
 def login():
     error_message = ""
     userid = ""
+
+    if request.method == "POST":
+        userid = request.form.get("userid")
+        password = request.form.get("password")
+        # ログインのチェック
+        if (userid == "shu" and password == "1234"):
+            user = User(userid)
+            login_user(user)
+            return redirect("/")
+        else:
+            error_message = "入力された情報が間違ってます"
+
     return render_template("login.html", userid=userid, error_message=error_message)
 
 @app.route("/")
@@ -36,6 +48,7 @@ def top():
     return render_template("index.html", memo_list=memo_list)
 
 @app.route("/regist",methods=['GET','POST'])
+@login_required
 def regist():
     if request.method =='POST':
         #画面からの登録情報の取得
@@ -49,6 +62,7 @@ def regist():
     return render_template('regist.html')
 
 @app.route("/<id>/edit", methods=['GET', 'POST'])
+@login_required
 def edit(id):
     if request.method =='POST':
         #画面からの登録情報の取得
@@ -65,6 +79,7 @@ def edit(id):
     return render_template("edit.html", post=post)
 
 @app.route("/<id>/delete", methods=['GET', 'POST'])
+@login_required
 def delete(id):
     if request.method =='POST':
         #画面からの登録情報の取得
